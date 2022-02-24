@@ -7,11 +7,21 @@ public final class Principal {
 		System.out.println("MIS MATRICES");
 		Matriz matrizA;
 		matrizA = recogerMatriz();
-		
+		System.out.println(matrizA);
+		Matriz matrizB;
+		matrizB = recogerMatriz();
+		System.out.println(matrizB);
+
+		Matriz resultadoSuma = matrizA.sumar(matrizB);
+		if(resultadoSuma == null){
+			System.out.println("Las matrices deben tener el mismo tamaño");
+		}else{
+			System.out.println(resultadoSuma);
+		}
 		//TODO: Por ahora nuestro programa solo recoge una matriz y la enseña
 		//		por pantalla. Pero debemos implementar el resto del programa.
 		
-		System.out.println(matrizA);
+//		System.out.println(matrizA);
 		// como tenemos implementada la función toString podemos poner
 		// directamente el nombre de nuestro objeto y Java ya llama a la función toString 
 	}
