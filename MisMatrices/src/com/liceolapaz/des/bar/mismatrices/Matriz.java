@@ -66,8 +66,19 @@ class Matriz {
 	 * En caso de que no se puedan sumar se devolverá null.
 	 */
 	public Matriz sumar(Matriz operando) {
-		//TODO: implementarla operación de suma
-		return this;
+		if(this.matriz.length == operando.matriz.length && this.matriz[0].length == operando.matriz[0].length){
+			double[][] resultado = new double[matriz.length][matriz[0].length];
+			for (int i = 0; i < matriz.length; i++){
+				for (int j = 0; j < matriz[0].length;j++){
+					resultado[i][j] = this.matriz[i][j] + operando.matriz[i][j];
+				}
+			}
+			Matriz resultadoMatriz = new Matriz(resultado);
+			return resultadoMatriz;
+		}
+		else{
+			return null;
+		}
 	}
 	
 	/**
