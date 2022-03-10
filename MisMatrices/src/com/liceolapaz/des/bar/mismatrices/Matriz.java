@@ -90,9 +90,15 @@ class Matriz {
 	 * En caso de que no se puedan multiplicar se devolverá null.
 	 */
 	public Matriz multiplicar(Matriz operando) {
-		//TODO: implementarla operación de multiplicar con un operando Matriz
+		
+			if(this.matriz.length==operando.matriz[0].length) {
+				Matriz matrizResultado;
+				double[][] resultado;
+				resultado=new double[operando.matriz[0].length][operando.matriz[0].length];
+				matrizResultado=new
+			}
 		return this;
-	}
+	
 	
 	/**
 	 * Este método implementa la operación de multiplicar una matriz por un número.
