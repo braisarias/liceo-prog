@@ -91,14 +91,32 @@ class Matriz {
 	 */
 	public Matriz multiplicar(Matriz operando) {
 		
-			if(this.matriz.length==operando.matriz[0].length) {
-				Matriz matrizResultado;
-				double[][] resultado;
-				resultado=new double[operando.matriz[0].length][operando.matriz[0].length];
-				matrizResultado=new
+		if(this.matriz[0].length == operando.matriz.length) {
+			Matriz matrizResultado;
+			double[][] resultado;
+			int filas = this.matriz.length;
+			int columnas = operando.matriz[0].length;
+			resultado = new double[filas][columnas];
+			
+			// rellenamos array resultado
+			for (int i=0; i < filas; i++) {
+				for(int j=0; j < columnas; j++) {
+					double elemento = 0;
+					
+					for(int k=0; k < columnas; k++) {
+						double a = this.matriz[i][k];
+						double b = operando.matriz[k][j];
+						elemento += a * b;
+					}
+					resultado[i][j] = elemento;
+				}
 			}
-		return this;
-	
+			
+			matrizResultado = new Matriz(resultado);
+			return matrizResultado;
+		}
+		return null;
+	}
 	
 	/**
 	 * Este método implementa la operación de multiplicar una matriz por un número.
@@ -106,8 +124,20 @@ class Matriz {
 	 * @return la matriz resultado de la multiplicación.
 	 */
 	public Matriz multiplicar(double escalar) {
-		//TODO: implementarla operación de multiplicar con un operando escalar
-		return this;
+		Matriz matrizResultado;
+		
+		double[][] resultado;
+		
+		resultado = new double[this.matriz.length][this.matriz[0].length];
+		
+		
+		for (int i=0; i < this.matriz.length; i++) {
+			for (int j=0; j < this.matriz[0].length; j++) {
+				resultado[i][j] = this.matriz[i][j] * escalar;
+			}
+		}
+		matrizResultado = new Matriz (resultado);
+		return matrizResultado;
 	}
 	
 	/**
@@ -121,8 +151,45 @@ class Matriz {
 		// calcular el determinante, por lo tanto si usamos la clase Double
 		// en lugar del primitivo podemos devolver null cuando no se pueda calcular
 		
-		//TODO: implementarla operación determinante
-		return null;
+		if (this.matriz.length != this.matriz[0].length) {
+			return null;
+		}
+		
+		if (this.matriz.length == 2) {
+			return this.matriz[0][0] * this.matriz[1][1] - this.matriz[0][1]*this.matriz[1][0];
+		}
+		if (this.matriz.length == 1){
+			return this.matriz[0][0];
+		}
+		double resultado = 0;
+		for (int i=0; i < this.matriz.length; i++) {
+			double e = this.matriz[0][i];
+			resultado += e * Math.pow(-1, i) * this.adjuntaXY(0,i).determinante();
+		}
+		
+		return resultado;
+	}
+
+	private Matriz adjuntaXY(int x, int y) {
+		double[][] resultado = new double[this.matriz.length -1][this.matriz[0].length -1];
+		int iA = 0;
+		int jA = 0;
+		
+		for (int i=0; i < this.matriz.length; i++) {
+			for (int j=0; j < this.matriz[0].length; j++) {
+				
+				if (jA >= resultado.length) {
+					jA = 0;
+					iA++;
+				}
+				
+				if (i != x && j != y) {
+					resultado[iA][jA++] = this.matriz[i][j];
+				}
+				
+			}
+		}
+		return new Matriz(resultado);
 	}
 
 	/**
@@ -131,8 +198,29 @@ class Matriz {
 	 * En caso contrario devolverá null.
 	 */
 	public Matriz invertir() {
-		//TODO: implementarla operación invertir
-		return this;
+		if (this.matriz.length != this.matriz[0].length) {
+			return null; // matriz no cuadrada
+		}
+		double determinante = this.determinante();
+		
+		if (determinante == 0) {
+			return null; // determinante distinto de cero para poder calcular
+			
+		}
+		return this.adjunta().traspuesta().multiplicar(1/determinante);
+	}
+	
+	private Matriz adjunta() {
+		double [][] vAdj = new double[this.matriz.length][this.matriz[0].length];
+		int signo = 1;
+		for (int i=0; i < this.matriz.length; i++) {
+			for (int j=0; j < this.matriz[0].length; j++) {
+				signo = (int) Math.pow(-1, i+j);
+				vAdj[i][j] = signo * this.adjuntaXY(i, j).determinante();
+			}
+		}
+		
+		return new Matriz(vAdj);
 	}
 	
 	/**
@@ -140,7 +228,17 @@ class Matriz {
 	 * @return la matriz traspuesta.
 	 */
 	public Matriz traspuesta() {
-		//TODO: implementarla operación traspuesta
-		return this;
+		Matriz matrizResultado;
+		double[][] resultado;
+		
+		resultado = new double[this.matriz[0].length][this.matriz.length];
+		
+		for (int i=0; i < this.matriz.length; i++) {
+			for (int j=0; j < this.matriz[0].length; j++) {
+				resultado[j][i] = this.matriz[i][j];
+			}
+		}
+		matrizResultado = new Matriz (resultado);
+		return matrizResultado;
 	}
 }

@@ -4,26 +4,134 @@ import java.util.Scanner;
 
 public final class Principal {
 	public static void main(String[] args) {
-		System.out.println("MIS MATRICES");
-		Matriz matrizA;
-		matrizA = recogerMatriz();
-		System.out.println(matrizA);
-		Matriz matrizB;
-		matrizB = recogerMatriz();
-		System.out.println(matrizB);
+		do {
+			imprimirMenu();
+			int opcion = recogerEntero("Introducir opcion: ");
+			switch (opcion) {
+				case 0:
+					System.exit(0);
+				case 1: // suma
+					do_suma();
+					break;
+				case 2: // multiplicar
+					do_multiplicar();
+					break;
+				case 3: // determinante
+					do_determinante();
+					break;
+				case 4: // inversa
+					do_inversa();
+					break;
+				case 5: // traspuesta
+					do_traspuesta();
+					break;
+				default:
+					break;
+			}
+		} while (true); 
+	}
 
-		Matriz resultadoSuma = matrizA.sumar(matrizB);
-		if(resultadoSuma == null){
-			System.out.println("Las matrices deben tener el mismo tamaño");
-		}else{
-			System.out.println(resultadoSuma);
-		}
-		//TODO: Por ahora nuestro programa solo recoge una matriz y la enseña
-		//		por pantalla. Pero debemos implementar el resto del programa.
+	private static void do_suma() {
+		Matriz matrizA = recogerMatriz();
+		System.out.println("matrizA:");
+		System.out.println(matrizA);
+		Matriz matrizB = recogerMatriz();
+		System.out.println("matrizB:");
+		System.out.println(matrizB);
+		Matriz suma = matrizA.sumar(matrizB);
 		
-//		System.out.println(matrizA);
-		// como tenemos implementada la función toString podemos poner
-		// directamente el nombre de nuestro objeto y Java ya llama a la función toString 
+		if (suma == null) {
+			System.out.println("Matrices de distinta dimensión. No se pueden sumar");
+			return;
+		}
+		System.out.println("Suma:");
+		System.out.println(suma);
+	}
+
+	private static void do_multiplicar() {
+		int opcion =0;
+		while (opcion > 2 || opcion < 1) {
+			imprimirMenuMultiplicar();
+			opcion = recogerEntero("Introduce opcion:");
+		}
+		
+		Matriz matrizA = recogerMatriz();
+		System.out.println("matrizA:");
+		System.out.println(matrizA);
+		Matriz resultado;
+		if (opcion == 1) {
+			Matriz matrizB = recogerMatriz();
+			System.out.println("matrizB:");
+			System.out.println(matrizB);
+			resultado = matrizA.multiplicar(matrizB);
+			if(resultado == null) {
+				System.out.println("Estas matrices no se pueden multiplicar");
+				return;
+			}
+		} else {
+			double escalar = recogerDouble("Introduce el escalar: ");
+			resultado = matrizA.multiplicar(escalar);
+		}
+		
+		System.out.println("Multiplicación:");
+		System.out.println(resultado);
+		
+	}
+
+	private static void imprimirMenuMultiplicar() {
+		System.out.println("1. Multiplicar 2 matrices"
+				+ "\n2. Multiplicar matriz x escalar");
+	}
+
+	private static void do_determinante() {
+		Matriz matrizA = recogerMatriz();
+		System.out.println("matrizA:");
+		System.out.println(matrizA);
+		
+		Double determinante = matrizA.determinante();
+		
+		if (determinante == null) {
+			System.out.println("Matriz no cuadrada. No se puede calcular el determinante");
+			return;
+		}
+		
+		System.out.println("Determinante: " + determinante);
+	}
+
+	private static void do_inversa() {
+		Matriz matrizA = recogerMatriz();
+		System.out.println("matrizA:");
+		System.out.println(matrizA);
+		
+		Matriz inversa = matrizA.invertir();
+		
+		if (inversa == null) {
+			System.out.println("Matriz no invertible.");
+			return;
+		}
+		
+		System.out.println("Inversa:");
+		System.out.println(inversa);
+		
+	}
+
+	private static void do_traspuesta() {
+		Matriz matrizA = recogerMatriz();
+		System.out.println("matrizA:");
+		System.out.println(matrizA);
+			
+		System.out.println("Traspuesta:");
+		System.out.println(matrizA.traspuesta());
+	}
+
+	private static void imprimirMenu() {
+		System.out.println("MIS MATRICES\n"
+				+ "1. Sumar\n"
+				+ "2. Multiplicar\n"
+				+ "3. Determinante\n"
+				+ "4. Invertir\n"
+				+ "5. Traspuesta\n"
+				+ "0. Salir");
 	}
 
 	/**
@@ -101,6 +209,22 @@ public final class Principal {
 			numero = sc.nextInt();
 		}
 		return numero.intValue();
+	}
+	
+	/**
+	 * Esta función enseña un mensaje y recoge un número double por teclado.
+	 * @param msg el mensaje que enseña por pantalla
+	 * @return devuelve el valor del double introducido por pantalla
+	 */
+	private static double recogerDouble(String msg) {
+		Double numero = null;
+		Scanner sc = new Scanner(System.in);
+		
+		while (numero == null) {
+			System.out.print(msg);
+			numero = sc.nextDouble();
+		}
+		return numero.doubleValue();
 	}
 
 }
